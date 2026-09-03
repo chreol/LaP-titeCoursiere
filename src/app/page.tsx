@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const whatsappNumber = '237671290827';
 const whatsapp = (message: string) => `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
@@ -68,6 +68,7 @@ const lightboxImages = [
 export default function Home() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [zoom, setZoom] = useState(1);
+  const touchStartX = useRef<number | null>(null);
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
@@ -78,6 +79,15 @@ export default function Home() {
     if (lightboxIndex === null) return;
     setLightboxIndex((lightboxIndex + direction + lightboxImages.length) % lightboxImages.length);
     setZoom(1);
+  };
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = event.changedTouches[0]?.clientX ?? null;
+  };
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartX.current === null) return;
+    const distance = event.changedTouches[0]?.clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(distance) >= 48) moveLightbox(distance > 0 ? -1 : 1);
   };
 
   useEffect(() => {
@@ -123,8 +133,6 @@ export default function Home() {
           <div className="hero-meta"><span>Ouvert 7j/7</span><span>07h — 18h</span><span>Réponse rapide</span></div>
         </div>
         <div className="hero-art" aria-label="Espace réservé au visuel principal de La P'Tite Coursière">
-          <div className="art-note"><span>01</span><p>Un intérieur<br /><strong>qui respire.</strong></p></div>
-          <div className="art-orbit orbit-one" /><div className="art-orbit orbit-two" />
           <button className="image-trigger hero-image-trigger" type="button" onClick={() => openLightbox(0)} aria-label="Agrandir le logo de La P'Tite Coursière"><Image className="hero-image hero-logo" src="/images/LOGO La P'tite Coursiere Fond Transparent.webp" alt="Logo La P'Tite Coursière" fill priority sizes="(max-width: 800px) 100vw, 50vw" /></button>
         </div>
       </section>
@@ -148,7 +156,7 @@ export default function Home() {
 
       <section className="video-section" id="videos"><div className="section-top"><div><p className="kicker">EN IMAGES</p><h2>Notre univers,<br /><em>en mouvement.</em></h2></div><p className="section-lead">Découvrez notre façon de prendre soin des maisons et des journées.</p></div><div className="video-grid"><iframe src="https://www.youtube-nocookie.com/embed/toDWlSwyXFM" title="Découvrez La P'Tite Coursière" loading="lazy" allowFullScreen /><iframe src="https://www.youtube-nocookie.com/embed/8cCSuJry_cg" title="Les services de La P'Tite Coursière" loading="lazy" allowFullScreen /></div></section>
 
-      <section className="gallery-section" aria-labelledby="gallery-title"><div className="section-top"><div><p className="kicker">NOS RÉALISATIONS</p><h2 id="gallery-title">Des images<br /><em>qui parlent.</em></h2></div><p className="section-lead">Retrouvez ici les différents visuels de La P&apos;Tite Coursière, réunis dans une galerie claire et adaptée à tous les écrans.</p></div><div className="gallery-grid">{galleryImages.map(([src, alt], index) => <figure key={src}><button className="image-trigger" type="button" onClick={() => openLightbox(index + 4)} aria-label={`Agrandir : ${alt}`}><Image src={`/images/${src}`} alt={alt} width={700} height={700} loading="lazy" /><span className="zoom-hint" aria-hidden="true">+</span></button><figcaption>{alt}</figcaption></figure>)}</div></section>
+      <section className="gallery-section" aria-labelledby="gallery-title"><div className="section-top"><div><p className="kicker">NOS RÉALISATIONS</p><h2 id="gallery-title">Des images<br /><em>qui parlent.</em></h2></div><p className="section-lead">Retrouvez trois visuels ici. Ouvrez une image puis balayez pour parcourir toute la galerie.</p></div><div className="gallery-grid">{galleryImages.slice(0, 3).map(([src, alt], index) => <figure key={src}><button className="image-trigger" type="button" onClick={() => openLightbox(index + 4)} aria-label={`Agrandir : ${alt}`}><Image src={`/images/${src}`} alt={alt} width={700} height={700} loading="lazy" /><span className="zoom-hint" aria-hidden="true">+</span></button><figcaption>{alt}</figcaption></figure>)}</div></section>
 
       <section className="final-cta"><p className="kicker">UN MESSAGE SUFFIT</p><h2>Et si vous vous<br /><em>libériez du reste ?</em></h2><p>Offrez-vous plus de temps pour vous et pour ceux qui comptent.</p><a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> J&apos;ai besoin d&apos;un coup de main <span aria-hidden="true">↗</span></a></section>
 
@@ -156,7 +164,7 @@ export default function Home() {
 
       <footer className="site-footer"><div className="wordmark"><Image src="/images/La P'tite Coursiere Fond Transparent.webp" alt="Logo La P'Tite Coursière" width={43} height={43} className="footer-logo" /><span><strong>La P&apos;Tite Coursière</strong><small>Une initiative de CHREOL EMPIRE</small></span></div><p><a className="footer-contact" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> WhatsApp · 671 290 827</a><br />Yaoundé, Cameroun</p><p>© {new Date().getFullYear()} La P&apos;Tite Coursière</p></footer>
       <a className="floating-whatsapp" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer" aria-label="Contacter La P'Tite Coursière sur WhatsApp"><WhatsAppIcon /><b>Besoin d&apos;aide ?</b></a>
-      {lightboxIndex !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Aperçu de l'image" onMouseDown={(event) => { if (event.target === event.currentTarget) closeLightbox(); }}><button className="lightbox-close" type="button" onClick={closeLightbox} aria-label="Fermer l'aperçu">X</button><button className="lightbox-arrow lightbox-prev" type="button" onClick={() => moveLightbox(-1)} aria-label="Image précédente">‹</button><div className="lightbox-content"><Image src={`/images/${lightboxImages[lightboxIndex][0]}`} alt={lightboxImages[lightboxIndex][1]} width={1400} height={1000} className="lightbox-image" style={{ transform: `scale(${zoom})` }} priority /><p>{lightboxImages[lightboxIndex][1]}</p></div><button className="lightbox-arrow lightbox-next" type="button" onClick={() => moveLightbox(1)} aria-label="Image suivante">›</button><div className="lightbox-controls"><button type="button" onClick={() => setZoom((current) => Math.max(.75, current - .25))} aria-label="Réduire le zoom">−</button><span>{Math.round(zoom * 100)}%</span><button type="button" onClick={() => setZoom((current) => Math.min(2.5, current + .25))} aria-label="Augmenter le zoom">+</button></div></div>}
+      {lightboxIndex !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Aperçu de l'image" onMouseDown={(event) => { if (event.target === event.currentTarget) closeLightbox(); }} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}><button className="lightbox-close" type="button" onClick={closeLightbox} aria-label="Fermer l'aperçu">X</button><button className="lightbox-arrow lightbox-prev" type="button" onClick={() => moveLightbox(-1)} aria-label="Image précédente">‹</button><div className="lightbox-content"><Image src={`/images/${lightboxImages[lightboxIndex][0]}`} alt={lightboxImages[lightboxIndex][1]} width={1400} height={1000} className="lightbox-image" style={{ transform: `scale(${zoom})` }} priority /><p>{lightboxImages[lightboxIndex][1]}</p></div><button className="lightbox-arrow lightbox-next" type="button" onClick={() => moveLightbox(1)} aria-label="Image suivante">›</button><div className="lightbox-controls"><button type="button" onClick={() => setZoom((current) => Math.max(.75, current - .25))} aria-label="Réduire le zoom">−</button><span>{Math.round(zoom * 100)}%</span><button type="button" onClick={() => setZoom((current) => Math.min(2.5, current + .25))} aria-label="Augmenter le zoom">+</button></div></div>}
     </main>
   );
 }

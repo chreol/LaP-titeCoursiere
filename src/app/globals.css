@@ -120,3 +120,17 @@
 @media (max-width: 480px) {
 	.testimonials-grid { grid-template-columns: 1fr; }
 }
+
+/* Keep content clear of section edges and preserve the complete hero logo. */
+.price-section { padding-inline: clamp(20px, 4vw, 64px); }
+.price-list { min-width: 0; }
+.price-row { padding-inline: 10px; }
+.price-row a { transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease; }
+.price-row a:hover, .price-row a:focus-visible { background: var(--gold); border-color: var(--gold); color: var(--plum); transform: translateY(-2px); }
+.hero-art { min-height: clamp(420px, 48vw, 560px); border-radius: var(--radius); }
+.hero-image.hero-logo { object-fit: contain; padding: clamp(20px, 6vw, 72px); }
+.hero-image-trigger { border-radius: inherit; }
+@media (max-width: 800px) {
+	.price-section { padding-inline: 20px; }
+	.hero-art { min-height: 390px; }
+}
