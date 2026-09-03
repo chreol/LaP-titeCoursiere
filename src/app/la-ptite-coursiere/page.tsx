@@ -82,7 +82,7 @@ export default function LaPtiteCoursierePage() {
               </h1>
 
               <p className="mt-4 max-w-xl text-lg text-zinc-300">
-                Votre confort, notre priorité.
+                Vous vivez. Nous nous occupons du reste.
               </p>
 
               <p className="mt-5 max-w-xl text-base leading-7 text-zinc-300">
@@ -288,7 +288,7 @@ export default function LaPtiteCoursierePage() {
         </section>
 
         <section className="mt-16 rounded-[30px] border border-[#C4A55D]/30 bg-[linear-gradient(135deg,_rgba(196,165,93,0.2),_rgba(56,20,63,0.95))] p-6 text-center sm:p-8 lg:p-10">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#F1D78A]">Votre confort, notre priorité</p>
+          <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#F1D78A]">Vous vivez. Nous nous occupons du reste.</p>
           <h2 className="mt-4 text-3xl font-black sm:text-4xl">Un appel, un message… et nous nous occupons du reste.</h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-zinc-200">
             Vous gagnez du temps, vous gardez votre sérénité et vous profitez davantage de votre famille et de vos moments personnels.
