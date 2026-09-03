@@ -10,7 +10,7 @@ const whatsappIcon = '/images/whatsapp.webp';
 const adminStorageKey = 'lpc-admin-content-v1';
 
 type AdminContent = {
-  testimonials: { id: string; quote: string; author: string; location: string }[];
+  testimonials: { id: string; quote: string; author: string; location: string; rating?: number }[];
   images: { id: string; src: string; alt: string }[];
   videos: { id: string; title: string; url: string }[];
 };
@@ -109,7 +109,7 @@ export default function Home() {
   const customGalleryImages = adminContent.images.map(({ src, alt }) => [src, alt] as [string, string]);
   const allGalleryImages = [...galleryImages.map(([src, alt]) => [`/images/${src}`, alt] as [string, string]), ...customGalleryImages];
   const lightboxImages = [...baseLightboxImages.slice(0, 4).map(([src, alt]) => [`/images/${src}`, alt] as [string, string]), ...allGalleryImages];
-  const allTestimonials = [...testimonials, ...adminContent.testimonials.map(({ quote, author, location }) => [`« ${quote} »`, `${author} · ${location}`] as [string, string])];
+  const allTestimonials = [...testimonials.map(([quote, source]) => [quote, source, 0] as [string, string, number]), ...adminContent.testimonials.map(({ quote, author, location, rating }) => [`« ${quote} »`, `${author} · ${location}`, rating || 0] as [string, string, number])];
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
@@ -201,7 +201,7 @@ export default function Home() {
 
       <section className="final-cta"><p className="kicker">UN MESSAGE SUFFIT</p><h2>Et si vous vous<br /><em>libériez du reste ?</em></h2><p>Offrez-vous plus de temps pour vous et pour ceux qui comptent.</p><a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> J&apos;ai besoin d&apos;un coup de main <span aria-hidden="true">↗</span></a></section>
 
-      <section className="testimonials-section" aria-labelledby="testimonials-title"><div className="section-top"><div><p className="kicker">L&apos;EXPÉRIENCE AU QUOTIDIEN</p><h2 id="testimonials-title">Le confort<br /><em>se partage.</em></h2></div><p className="section-lead">Des mots simples sur ce que nos clientes recherchent : du temps, du soin et une présence fiable.</p></div><div className="testimonials-grid">{allTestimonials.map(([quote, source]) => <figure className="testimonial" key={`${quote}-${source}`}><blockquote>{quote}</blockquote><figcaption>{source}</figcaption></figure>)}</div><p className="testimonial-note">Avis présentés comme exemples éditoriaux, à remplacer par vos témoignages clients vérifiés.</p></section>
+      <section className="testimonials-section" aria-labelledby="testimonials-title"><div className="section-top"><div><p className="kicker">L&apos;EXPÉRIENCE AU QUOTIDIEN</p><h2 id="testimonials-title">Le confort<br /><em>se partage.</em></h2></div><p className="section-lead">Des mots simples sur ce que nos clientes recherchent : du temps, du soin et une présence fiable.</p></div><div className="testimonials-marquee"><div className="testimonials-track"><div className="testimonials-grid">{allTestimonials.map(([quote, source, rating]) => <figure className="testimonial" key={`${quote}-${source}`}><blockquote>{quote}</blockquote>{rating > 0 && <div className="testimonial-stars" aria-label={`${rating} étoiles sur 5`}>{'★'.repeat(rating)}{'☆'.repeat(5 - rating)}</div>}<figcaption>{source}</figcaption></figure>)}</div><div className="testimonials-grid" aria-hidden="true">{allTestimonials.map(([quote, source, rating]) => <figure className="testimonial" key={`duplicate-${quote}-${source}`}><blockquote>{quote}</blockquote>{rating > 0 && <div className="testimonial-stars">{'★'.repeat(rating)}{'☆'.repeat(5 - rating)}</div>}<figcaption>{source}</figcaption></figure>)}</div></div></div><p className="testimonial-note">Avis présentés comme exemples éditoriaux, à remplacer par vos témoignages clients vérifiés.</p></section>
 
       <footer className="site-footer"><div className="wordmark"><Image src="/images/LOGO La P'tite Coursiere Fond Transparent.webp" alt="Logo La P'Tite Coursière" width={43} height={43} className="footer-logo" /><span><strong>La P&apos;Tite Coursière</strong><small>Une initiative de CHREOL EMPIRE</small></span></div><p><a className="footer-contact" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> WhatsApp · 671 290 827</a><br />Yaoundé, Cameroun</p><p>© {new Date().getFullYear()} La P&apos;Tite Coursière</p></footer>
       <a className="floating-whatsapp" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer" aria-label="Contacter La P'Tite Coursière sur WhatsApp"><WhatsAppIcon /><b>Besoin d&apos;aide ?</b></a>

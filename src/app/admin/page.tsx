@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChangeEvent, FormEvent, useState } from 'react';
 
-type Testimonial = { id: string; quote: string; author: string; location: string };
+type Testimonial = { id: string; quote: string; author: string; location: string; rating?: number };
 type ImageItem = { id: string; src: string; alt: string };
 type VideoItem = { id: string; title: string; url: string };
 type ContentStore = { testimonials: Testimonial[]; images: ImageItem[]; videos: VideoItem[] };
@@ -34,7 +34,7 @@ export default function AdminPage() {
   const [notice, setNotice] = useState('');
   const [githubToken, setGithubToken] = useState('');
   const [syncing, setSyncing] = useState(false);
-  const [testimonial, setTestimonial] = useState({ quote: '', author: '', location: 'Yaoundé' });
+  const [testimonial, setTestimonial] = useState({ quote: '', author: '', location: 'Yaoundé', rating: 5 });
   const [image, setImage] = useState({ src: '', alt: '' });
   const [video, setVideo] = useState({ title: '', url: '' });
 
@@ -48,8 +48,8 @@ export default function AdminPage() {
   const addTestimonial = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!testimonial.quote.trim() || !testimonial.author.trim()) return;
-    saveContent({ ...content, testimonials: [...content.testimonials, { id: createId(), quote: testimonial.quote.trim(), author: testimonial.author.trim(), location: testimonial.location.trim() }] }, 'Témoignage ajouté.');
-    setTestimonial({ quote: '', author: '', location: 'Yaoundé' });
+    saveContent({ ...content, testimonials: [...content.testimonials, { id: createId(), quote: testimonial.quote.trim(), author: testimonial.author.trim(), location: testimonial.location.trim(), rating: testimonial.rating }] }, 'Témoignage ajouté.');
+    setTestimonial({ quote: '', author: '', location: 'Yaoundé', rating: 5 });
   };
 
   const addImage = (event: FormEvent<HTMLFormElement>) => {
@@ -75,6 +75,7 @@ export default function AdminPage() {
   };
 
   const removeItem = (type: keyof ContentStore, id: string) => {
+    if (!window.confirm('Supprimer définitivement cet élément ?')) return;
     const next = { ...content, [type]: content[type].filter((item) => item.id !== id) } as ContentStore;
     saveContent(next, 'Élément supprimé.');
   };
@@ -166,12 +167,13 @@ export default function AdminPage() {
           <section className="admin-card">
             <div className="admin-card-heading"><span className="admin-index">01</span><div><p className="kicker">PAROLE CLIENT</p><h2>Ajouter un témoignage</h2></div></div>
             <form className="admin-form" onSubmit={addTestimonial}>
-              <label>Appréciation<textarea value={testimonial.quote} onChange={(event) => setTestimonial({ ...testimonial, quote: event.target.value })} placeholder="Ce que votre client souhaite partager..." required /></label>
+              <label>Commentaire en une ligne<input value={testimonial.quote} onChange={(event) => setTestimonial({ ...testimonial, quote: event.target.value })} placeholder="Une courte appréciation..." maxLength={140} required /></label>
               <label>Nom ou prénom<input value={testimonial.author} onChange={(event) => setTestimonial({ ...testimonial, author: event.target.value })} placeholder="Ex. Sandrine" required /></label>
               <label>Quartier<input value={testimonial.location} onChange={(event) => setTestimonial({ ...testimonial, location: event.target.value })} placeholder="Yaoundé" /></label>
+              <label>Note<select value={testimonial.rating} onChange={(event) => setTestimonial({ ...testimonial, rating: Number(event.target.value) })}><option value={5}>★★★★★ · 5/5</option><option value={4}>★★★★☆ · 4/5</option><option value={3}>★★★☆☆ · 3/5</option><option value={2}>★★☆☆☆ · 2/5</option><option value={1}>★☆☆☆☆ · 1/5</option></select></label>
               <button className="admin-submit" type="submit">Publier le témoignage</button>
             </form>
-            <div className="admin-list">{content.testimonials.map((item) => <div className="admin-list-item" key={item.id}><div><strong>« {item.quote} »</strong><span>{item.author} · {item.location}</span></div><button type="button" onClick={() => removeItem('testimonials', item.id)} aria-label={`Supprimer le témoignage de ${item.author}`}>Supprimer</button></div>)}</div>
+            <div className="admin-list">{content.testimonials.map((item) => <div className="admin-list-item" key={item.id}><div><strong>« {item.quote} »</strong><span className="admin-stars" aria-label={`${item.rating || 0} étoiles sur 5`}>{'★'.repeat(item.rating || 0)}{'☆'.repeat(5 - (item.rating || 0))}</span><span>{item.author} · {item.location}</span></div><button type="button" onClick={() => removeItem('testimonials', item.id)} aria-label={`Supprimer le témoignage de ${item.author}`}>Supprimer</button></div>)}</div>
           </section>
 
           <section className="admin-card">
