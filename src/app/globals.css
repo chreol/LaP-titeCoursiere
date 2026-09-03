@@ -15,6 +15,9 @@
 @media (max-width:480px) { .button-small { display:none; } .hero-art { min-height:330px; } .service-grid,.trust-grid { grid-template-columns:1fr; } .service-item { min-height:185px; border-left:1px solid rgba(75,24,84,.14)!important; } .trust-item { min-height:170px; } .trust-item h3 { margin-top:30px; } .price-row { grid-template-columns:30px 1fr; gap:10px; padding:12px 0; } .price-row strong { grid-column:2; } .floating-whatsapp { right:14px; bottom:14px; } }
 
 .header-logo { width: 43px; height: 43px; border-radius: 50%; object-fit: contain; }
+.whatsapp-icon { width: 20px; height: 20px; object-fit: contain; flex: 0 0 auto; }
+.footer-contact { display: inline-flex; align-items: center; gap: 7px; }
+.hero-logo { object-fit: contain; padding: 12%; }
 .hero-art { isolation: isolate; }
 .hero-image { object-fit: cover; object-position: center; }
 .hero-image-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(37,19,41,.08), rgba(37,19,41,.7)); }

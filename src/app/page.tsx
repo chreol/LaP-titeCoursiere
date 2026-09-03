@@ -5,6 +5,11 @@ import { useEffect, useState } from 'react';
 
 const whatsappNumber = '237671290827';
 const whatsapp = (message: string) => `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+const whatsappIcon = '/images/whatsapp.webp';
+
+function WhatsAppIcon() {
+  return <Image src={whatsappIcon} alt="" width={20} height={20} className="whatsapp-icon" aria-hidden="true" />;
+}
 
 const services = [
   ['01', 'Ménage & entretien', 'Une maison nette, accueillante et entretenue avec soin.', 'À partir de 3 500 FCFA'],
@@ -53,7 +58,7 @@ const galleryImages = [
 ];
 
 const lightboxImages = [
-  ["Prendre soin de votre maison est un plaisir pour nous La P'tite coursiere.webp", "La P'Tite Coursière prend soin d'une maison à Yaoundé"],
+  ["LOGO La P'tite Coursiere Fond Transparent.webp", "Logo de La P'Tite Coursière"],
   ['La P’tite Coursière Services Wheel.webp', "Les services de La P'Tite Coursière"],
   ['La P’tite Coursière  Matinée en douceur.webp', "Une matinée accompagnée par La P'Tite Coursière"],
   ['Le rangement dans une chambre de la petite coursiere.webp', "Chambre rangée par La P'Tite Coursière"],
@@ -103,7 +108,7 @@ export default function Home() {
         <nav aria-label="Navigation principale">
           <a href="#services">Services</a><a href="#tarifs">Tarifs</a><a href="#zones">Zones</a><a href="#videos">Vidéos</a>
         </nav>
-        <a className="button button-small button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer">WhatsApp <span aria-hidden="true">↗</span></a>
+        <a className="button button-small button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> WhatsApp <span aria-hidden="true">↗</span></a>
       </header>
 
       <section className="hero" id="accueil">
@@ -112,7 +117,7 @@ export default function Home() {
           <h1>Le quotidien<br /><em>en mieux.</em></h1>
           <p className="hero-intro">Ménage, linge, courses et aide à domicile : nous prenons soin de ce qui vous prend du temps.</p>
           <div className="hero-actions">
-            <a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer">Parler sur WhatsApp <span aria-hidden="true">↗</span></a>
+            <a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> Parler sur WhatsApp <span aria-hidden="true">↗</span></a>
             <a className="text-link" href="#services">Découvrir les services <span aria-hidden="true">↓</span></a>
           </div>
           <div className="hero-meta"><span>Ouvert 7j/7</span><span>07h — 18h</span><span>Réponse rapide</span></div>
@@ -120,9 +125,7 @@ export default function Home() {
         <div className="hero-art" aria-label="Espace réservé au visuel principal de La P'Tite Coursière">
           <div className="art-note"><span>01</span><p>Un intérieur<br /><strong>qui respire.</strong></p></div>
           <div className="art-orbit orbit-one" /><div className="art-orbit orbit-two" />
-          <button className="image-trigger hero-image-trigger" type="button" onClick={() => openLightbox(0)} aria-label="Agrandir le visuel principal"><Image className="hero-image" src="/images/Prendre soin de votre maison est un plaisir pour nous La P'tite coursiere.webp" alt="La P'Tite Coursière prend soin d'une maison à Yaoundé" fill priority sizes="(max-width: 800px) 100vw, 50vw" /></button>
-          <div className="hero-image-overlay" />
-          <div className="art-center"><span>La P&apos;Tite</span><strong>Coursière</strong><small>Prendre soin, naturellement.</small></div>
+          <button className="image-trigger hero-image-trigger" type="button" onClick={() => openLightbox(0)} aria-label="Agrandir le logo de La P'Tite Coursière"><Image className="hero-image hero-logo" src="/images/LOGO La P'tite Coursiere Fond Transparent.webp" alt="Logo La P'Tite Coursière" fill priority sizes="(max-width: 800px) 100vw, 50vw" /></button>
         </div>
       </section>
 
@@ -132,8 +135,8 @@ export default function Home() {
       </section>
 
       <section className="price-section" id="tarifs">
-        <div className="price-heading"><p className="kicker">DES PRIX SIMPLES</p><h2>Clairs dès<br /><em>le départ.</em></h2><p>Les tarifs peuvent varier selon le volume, le besoin ou la zone. Écrivez-nous pour un devis précis.</p><a className="button button-light" href={whatsapp("Bonjour 👋🏾, je souhaite avoir plus d'informations sur vos tarifs et vos services.")} target="_blank" rel="noreferrer">Demander un renseignement <span aria-hidden="true">↗</span></a></div>
-        <div className="price-list">{prices.map(([name, price], index) => <div className="price-row" key={name}><span>0{index + 1}</span><p>{name}</p><strong>{price}</strong><a href={whatsapp(`Bonjour 👋🏾, je souhaite demander un devis pour le service suivant : ${name} (${price}).`)} target="_blank" rel="noreferrer" aria-label={`Demander un devis pour ${name}`}>Demander un devis ↗</a></div>)}</div>
+        <div className="price-heading"><p className="kicker">DES PRIX SIMPLES</p><h2>Clairs dès<br /><em>le départ.</em></h2><p>Les tarifs peuvent varier selon le volume, le besoin ou la zone. Écrivez-nous pour un devis précis.</p><a className="button button-light" href={whatsapp("Bonjour 👋🏾, je souhaite avoir plus d'informations sur vos tarifs et vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> Demander un renseignement <span aria-hidden="true">↗</span></a></div>
+        <div className="price-list">{prices.map(([name, price], index) => <div className="price-row" key={name}><span>0{index + 1}</span><p>{name}</p><strong>{price}</strong><a href={whatsapp(`Bonjour 👋🏾, je souhaite demander un devis pour le service suivant : ${name} (${price}).`)} target="_blank" rel="noreferrer" aria-label={`Demander un devis pour ${name}`}><WhatsAppIcon /> Demander un devis ↗</a></div>)}</div>
       </section>
 
       <section className="trust-section trust-photo-section">
@@ -141,18 +144,18 @@ export default function Home() {
         <div className="trust-grid">{trustPoints.map(([title, text], index) => <div className="trust-item" key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{text}</p></div>)}</div>
       </section>
 
-      <section className="zones-section" id="zones"><div className="zones-copy"><p className="kicker">LÀ OÙ NOUS SOMMES</p><h2>Yaoundé,<br /><em>avec vous.</em></h2><p>Vous êtes dans un quartier voisin ? Contactez-nous, nous vérifierons ensemble la disponibilité.</p><p className="zone-list-text"><strong>Quartiers desservis :</strong> {zones.join(' · ')}</p><a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je suis dans un quartier voisin de Yaoundé et je souhaite connaître vos disponibilités.")} target="_blank" rel="noreferrer">Vérifier ma zone <span aria-hidden="true">↗</span></a></div><div className="zone-map"><iframe title="Localisation de La P'Tite Coursière à Yaoundé" src="https://www.google.com/maps?q=Yaound%C3%A9%2C%20Cameroun&output=embed" loading="lazy" /><div className="map-overlay-label">Yaoundé · Cameroun</div></div></section>
+      <section className="zones-section" id="zones"><div className="zones-copy"><p className="kicker">LÀ OÙ NOUS SOMMES</p><h2>Yaoundé,<br /><em>avec vous.</em></h2><p>Vous êtes dans un quartier voisin ? Contactez-nous, nous vérifierons ensemble la disponibilité.</p><p className="zone-list-text"><strong>Quartiers desservis :</strong> {zones.join(' · ')}</p><a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je suis dans un quartier voisin de Yaoundé et je souhaite connaître vos disponibilités.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> Vérifier ma zone <span aria-hidden="true">↗</span></a></div><div className="zone-map"><iframe title="Localisation de La P'Tite Coursière à Yaoundé" src="https://www.google.com/maps?q=Yaound%C3%A9%2C%20Cameroun&output=embed" loading="lazy" /><div className="map-overlay-label">Yaoundé · Cameroun</div></div></section>
 
-      <section className="video-section" id="videos"><div className="section-top"><div><p className="kicker">EN IMAGES</p><h2>Notre univers,<br /><em>en mouvement.</em></h2></div><p className="section-lead">Découvrez notre façon de prendre soin des maisons et des journées.</p></div><div className="media-showcase"><div className="video-grid"><iframe src="https://www.youtube-nocookie.com/embed/toDWlSwyXFM" title="Découvrez La P'Tite Coursière" loading="lazy" allowFullScreen /><iframe src="https://www.youtube-nocookie.com/embed/8cCSuJry_cg" title="Les services de La P'Tite Coursière" loading="lazy" allowFullScreen /></div><div className="media-side"><button className="image-trigger" type="button" onClick={() => openLightbox(2)} aria-label="Agrandir la photo de la matinée"><Image src="/images/La P’tite Coursière  Matinée en douceur.webp" alt="Une matinée accompagnée par La P'Tite Coursière" width={500} height={650} /></button><button className="image-trigger" type="button" onClick={() => openLightbox(3)} aria-label="Agrandir la photo de la chambre"><Image src="/images/Le rangement dans une chambre de la petite coursiere.webp" alt="Chambre rangée par La P'Tite Coursière" width={500} height={650} /></button></div></div></section>
+      <section className="video-section" id="videos"><div className="section-top"><div><p className="kicker">EN IMAGES</p><h2>Notre univers,<br /><em>en mouvement.</em></h2></div><p className="section-lead">Découvrez notre façon de prendre soin des maisons et des journées.</p></div><div className="video-grid"><iframe src="https://www.youtube-nocookie.com/embed/toDWlSwyXFM" title="Découvrez La P'Tite Coursière" loading="lazy" allowFullScreen /><iframe src="https://www.youtube-nocookie.com/embed/8cCSuJry_cg" title="Les services de La P'Tite Coursière" loading="lazy" allowFullScreen /></div></section>
 
       <section className="gallery-section" aria-labelledby="gallery-title"><div className="section-top"><div><p className="kicker">NOS RÉALISATIONS</p><h2 id="gallery-title">Des images<br /><em>qui parlent.</em></h2></div><p className="section-lead">Retrouvez ici les différents visuels de La P&apos;Tite Coursière, réunis dans une galerie claire et adaptée à tous les écrans.</p></div><div className="gallery-grid">{galleryImages.map(([src, alt], index) => <figure key={src}><button className="image-trigger" type="button" onClick={() => openLightbox(index + 4)} aria-label={`Agrandir : ${alt}`}><Image src={`/images/${src}`} alt={alt} width={700} height={700} loading="lazy" /><span className="zoom-hint" aria-hidden="true">+</span></button><figcaption>{alt}</figcaption></figure>)}</div></section>
 
-      <section className="final-cta"><p className="kicker">UN MESSAGE SUFFIT</p><h2>Et si vous vous<br /><em>libériez du reste ?</em></h2><p>Offrez-vous plus de temps pour vous et pour ceux qui comptent.</p><a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer">J&apos;ai besoin d&apos;un coup de main <span aria-hidden="true">↗</span></a></section>
+      <section className="final-cta"><p className="kicker">UN MESSAGE SUFFIT</p><h2>Et si vous vous<br /><em>libériez du reste ?</em></h2><p>Offrez-vous plus de temps pour vous et pour ceux qui comptent.</p><a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> J&apos;ai besoin d&apos;un coup de main <span aria-hidden="true">↗</span></a></section>
 
       <section className="testimonials-section" aria-labelledby="testimonials-title"><div className="section-top"><div><p className="kicker">L&apos;EXPÉRIENCE AU QUOTIDIEN</p><h2 id="testimonials-title">Le confort<br /><em>se partage.</em></h2></div><p className="section-lead">Des mots simples sur ce que nos clientes recherchent : du temps, du soin et une présence fiable.</p></div><div className="testimonials-grid">{testimonials.map(([quote, source]) => <figure className="testimonial" key={quote}><blockquote>{quote}</blockquote><figcaption>{source}</figcaption></figure>)}</div><p className="testimonial-note">Avis présentés comme exemples éditoriaux, à remplacer par vos témoignages clients vérifiés.</p></section>
 
-      <footer className="site-footer"><div className="wordmark"><Image src="/images/La P'tite Coursiere Fond Transparent.webp" alt="Logo La P'Tite Coursière" width={43} height={43} className="footer-logo" /><span><strong>La P&apos;Tite Coursière</strong><small>Une initiative de CHREOL EMPIRE</small></span></div><p>WhatsApp · 671 290 827<br />Yaoundé, Cameroun</p><p>© {new Date().getFullYear()} La P&apos;Tite Coursière</p></footer>
-      <a className="floating-whatsapp" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer" aria-label="Contacter La P'Tite Coursière sur WhatsApp"><span>◔</span><b>Besoin d&apos;aide ?</b></a>
+      <footer className="site-footer"><div className="wordmark"><Image src="/images/La P'tite Coursiere Fond Transparent.webp" alt="Logo La P'Tite Coursière" width={43} height={43} className="footer-logo" /><span><strong>La P&apos;Tite Coursière</strong><small>Une initiative de CHREOL EMPIRE</small></span></div><p><a className="footer-contact" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> WhatsApp · 671 290 827</a><br />Yaoundé, Cameroun</p><p>© {new Date().getFullYear()} La P&apos;Tite Coursière</p></footer>
+      <a className="floating-whatsapp" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer" aria-label="Contacter La P'Tite Coursière sur WhatsApp"><WhatsAppIcon /><b>Besoin d&apos;aide ?</b></a>
       {lightboxIndex !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Aperçu de l'image" onMouseDown={(event) => { if (event.target === event.currentTarget) closeLightbox(); }}><button className="lightbox-close" type="button" onClick={closeLightbox} aria-label="Fermer l'aperçu">X</button><button className="lightbox-arrow lightbox-prev" type="button" onClick={() => moveLightbox(-1)} aria-label="Image précédente">‹</button><div className="lightbox-content"><Image src={`/images/${lightboxImages[lightboxIndex][0]}`} alt={lightboxImages[lightboxIndex][1]} width={1400} height={1000} className="lightbox-image" style={{ transform: `scale(${zoom})` }} priority /><p>{lightboxImages[lightboxIndex][1]}</p></div><button className="lightbox-arrow lightbox-next" type="button" onClick={() => moveLightbox(1)} aria-label="Image suivante">›</button><div className="lightbox-controls"><button type="button" onClick={() => setZoom((current) => Math.max(.75, current - .25))} aria-label="Réduire le zoom">−</button><span>{Math.round(zoom * 100)}%</span><button type="button" onClick={() => setZoom((current) => Math.min(2.5, current + .25))} aria-label="Augmenter le zoom">+</button></div></div>}
     </main>
   );
