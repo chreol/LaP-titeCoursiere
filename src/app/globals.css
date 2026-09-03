@@ -136,6 +136,8 @@
 @media (max-width: 800px) { .testimonials-track .testimonials-grid { width: min(100vw - 32px, 600px); grid-template-columns: repeat(3, minmax(220px, 1fr)); } }
 @media (max-width: 480px) { .testimonials-track .testimonials-grid { grid-template-columns: repeat(3, minmax(210px, 1fr)); } }
 @media (prefers-reduced-motion: reduce) { .testimonials-track { animation: none; } }
+.video-grid { min-width: 0; }
+@media (max-width: 800px) { .video-grid { grid-template-columns: 1fr; gap: 18px; } }
 .admin-stars, .testimonial-stars { display: block; margin-top: 7px; color: var(--gold); font-size: .78rem; letter-spacing: .08em; }
 .testimonial-stars { margin-bottom: 14px; }
 .admin-form input { min-height: 42px; }
