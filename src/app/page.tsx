@@ -1,4 +1,7 @@
+"use client";
+
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 const whatsappNumber = '237671290827';
 const whatsapp = (message: string) => `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
@@ -46,9 +49,50 @@ const galleryImages = [
   ['La P\'tite Coursiere pour vous !!.webp', 'Une présence proche de vous'],
   ['La proprete notre metier La petite coursiere Yaounde.webp', 'La propreté, notre métier'],
   ['Merci et agreable semaine a tous !!.webp', 'Une semaine plus sereine'],
+  ["La P'tite Coursiere (2).webp", 'Notre équipe, à votre service'],
+];
+
+const lightboxImages = [
+  ["Prendre soin de votre maison est un plaisir pour nous La P'tite coursiere.webp", "La P'Tite Coursière prend soin d'une maison à Yaoundé"],
+  ['La P’tite Coursière Services Wheel.webp', "Les services de La P'Tite Coursière"],
+  ['La P’tite Coursière  Matinée en douceur.webp', "Une matinée accompagnée par La P'Tite Coursière"],
+  ['Le rangement dans une chambre de la petite coursiere.webp', "Chambre rangée par La P'Tite Coursière"],
+  ...galleryImages,
 ];
 
 export default function Home() {
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [zoom, setZoom] = useState(1);
+
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    setZoom(1);
+  };
+  const closeLightbox = () => setLightboxIndex(null);
+  const moveLightbox = (direction: number) => {
+    if (lightboxIndex === null) return;
+    setLightboxIndex((lightboxIndex + direction + lightboxImages.length) % lightboxImages.length);
+    setZoom(1);
+  };
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeLightbox();
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        const direction = event.key === 'ArrowLeft' ? -1 : 1;
+        setLightboxIndex((current) => current === null ? null : (current + direction + lightboxImages.length) % lightboxImages.length);
+        setZoom(1);
+      }
+    };
+    document.body.classList.add('lightbox-open');
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.classList.remove('lightbox-open');
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [lightboxIndex]);
+
   return (
     <main>
       <header className="site-header">
@@ -76,7 +120,7 @@ export default function Home() {
         <div className="hero-art" aria-label="Espace réservé au visuel principal de La P'Tite Coursière">
           <div className="art-note"><span>01</span><p>Un intérieur<br /><strong>qui respire.</strong></p></div>
           <div className="art-orbit orbit-one" /><div className="art-orbit orbit-two" />
-          <Image className="hero-image" src="/images/Prendre soin de votre maison est un plaisir pour nous La P'tite coursiere.webp" alt="La P'Tite Coursière prend soin d'une maison à Yaoundé" fill priority sizes="(max-width: 800px) 100vw, 50vw" />
+          <button className="image-trigger hero-image-trigger" type="button" onClick={() => openLightbox(0)} aria-label="Agrandir le visuel principal"><Image className="hero-image" src="/images/Prendre soin de votre maison est un plaisir pour nous La P'tite coursiere.webp" alt="La P'Tite Coursière prend soin d'une maison à Yaoundé" fill priority sizes="(max-width: 800px) 100vw, 50vw" /></button>
           <div className="hero-image-overlay" />
           <div className="art-center"><span>La P&apos;Tite</span><strong>Coursière</strong><small>Prendre soin, naturellement.</small></div>
         </div>
@@ -84,7 +128,7 @@ export default function Home() {
 
       <section className="service-section" id="services">
         <div className="section-top"><div><p className="kicker">CE QUE NOUS FAISONS</p><h2>Tout ce qu&apos;il faut<br /><em>pour souffler.</em></h2></div><p className="section-lead">Une aide concrète, humaine et flexible pour les journées chargées et les maisons vivantes.</p></div>
-        <div className="service-showcase"><div className="service-grid">{services.map(([number, title, description, price]) => <article className="service-item" key={title}><span className="service-number">{number}</span><h3>{title}</h3><p>{description}</p><strong>{price}</strong></article>)}</div><Image src="/images/La P’tite Coursière Services Wheel.webp" alt="Les services de La P'Tite Coursière" width={720} height={720} className="services-wheel" /></div>
+        <div className="service-showcase"><div className="service-grid">{services.map(([number, title, description, price]) => <article className="service-item" key={title}><span className="service-number">{number}</span><h3>{title}</h3><p>{description}</p><strong>{price}</strong></article>)}</div><button className="image-trigger services-wheel-trigger" type="button" onClick={() => openLightbox(1)} aria-label="Agrandir la roue des services"><Image src="/images/La P’tite Coursière Services Wheel.webp" alt="Les services de La P'Tite Coursière" width={720} height={720} className="services-wheel" /></button></div>
       </section>
 
       <section className="price-section" id="tarifs">
@@ -99,9 +143,9 @@ export default function Home() {
 
       <section className="zones-section" id="zones"><div className="zones-copy"><p className="kicker">LÀ OÙ NOUS SOMMES</p><h2>Yaoundé,<br /><em>avec vous.</em></h2><p>Vous êtes dans un quartier voisin ? Contactez-nous, nous vérifierons ensemble la disponibilité.</p><p className="zone-list-text"><strong>Quartiers desservis :</strong> {zones.join(' · ')}</p><a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je suis dans un quartier voisin de Yaoundé et je souhaite connaître vos disponibilités.")} target="_blank" rel="noreferrer">Vérifier ma zone <span aria-hidden="true">↗</span></a></div><div className="zone-map"><iframe title="Localisation de La P'Tite Coursière à Yaoundé" src="https://www.google.com/maps?q=Yaound%C3%A9%2C%20Cameroun&output=embed" loading="lazy" /><div className="map-overlay-label">Yaoundé · Cameroun</div></div></section>
 
-      <section className="video-section" id="videos"><div className="section-top"><div><p className="kicker">EN IMAGES</p><h2>Notre univers,<br /><em>en mouvement.</em></h2></div><p className="section-lead">Découvrez notre façon de prendre soin des maisons et des journées.</p></div><div className="media-showcase"><div className="video-grid"><iframe src="https://www.youtube-nocookie.com/embed/toDWlSwyXFM" title="Découvrez La P'Tite Coursière" loading="lazy" allowFullScreen /><iframe src="https://www.youtube-nocookie.com/embed/8cCSuJry_cg" title="Les services de La P'Tite Coursière" loading="lazy" allowFullScreen /></div><div className="media-side"><Image src="/images/La P’tite Coursière  Matinée en douceur.webp" alt="Une matinée accompagnée par La P'Tite Coursière" width={500} height={650} /><Image src="/images/Le rangement dans une chambre de la petite coursiere.webp" alt="Chambre rangée par La P'Tite Coursière" width={500} height={650} /></div></div></section>
+      <section className="video-section" id="videos"><div className="section-top"><div><p className="kicker">EN IMAGES</p><h2>Notre univers,<br /><em>en mouvement.</em></h2></div><p className="section-lead">Découvrez notre façon de prendre soin des maisons et des journées.</p></div><div className="media-showcase"><div className="video-grid"><iframe src="https://www.youtube-nocookie.com/embed/toDWlSwyXFM" title="Découvrez La P'Tite Coursière" loading="lazy" allowFullScreen /><iframe src="https://www.youtube-nocookie.com/embed/8cCSuJry_cg" title="Les services de La P'Tite Coursière" loading="lazy" allowFullScreen /></div><div className="media-side"><button className="image-trigger" type="button" onClick={() => openLightbox(2)} aria-label="Agrandir la photo de la matinée"><Image src="/images/La P’tite Coursière  Matinée en douceur.webp" alt="Une matinée accompagnée par La P'Tite Coursière" width={500} height={650} /></button><button className="image-trigger" type="button" onClick={() => openLightbox(3)} aria-label="Agrandir la photo de la chambre"><Image src="/images/Le rangement dans une chambre de la petite coursiere.webp" alt="Chambre rangée par La P'Tite Coursière" width={500} height={650} /></button></div></div></section>
 
-      <section className="gallery-section" aria-labelledby="gallery-title"><div className="section-top"><div><p className="kicker">NOS RÉALISATIONS</p><h2 id="gallery-title">Des images<br /><em>qui parlent.</em></h2></div><p className="section-lead">Retrouvez ici les différents visuels de La P&apos;Tite Coursière, réunis dans une galerie claire et adaptée à tous les écrans.</p></div><div className="gallery-grid">{galleryImages.map(([src, alt]) => <figure key={src}><Image src={`/images/${src}`} alt={alt} width={700} height={700} loading="lazy" /><figcaption>{alt}</figcaption></figure>)}</div></section>
+      <section className="gallery-section" aria-labelledby="gallery-title"><div className="section-top"><div><p className="kicker">NOS RÉALISATIONS</p><h2 id="gallery-title">Des images<br /><em>qui parlent.</em></h2></div><p className="section-lead">Retrouvez ici les différents visuels de La P&apos;Tite Coursière, réunis dans une galerie claire et adaptée à tous les écrans.</p></div><div className="gallery-grid">{galleryImages.map(([src, alt], index) => <figure key={src}><button className="image-trigger" type="button" onClick={() => openLightbox(index + 4)} aria-label={`Agrandir : ${alt}`}><Image src={`/images/${src}`} alt={alt} width={700} height={700} loading="lazy" /><span className="zoom-hint" aria-hidden="true">+</span></button><figcaption>{alt}</figcaption></figure>)}</div></section>
 
       <section className="final-cta"><p className="kicker">UN MESSAGE SUFFIT</p><h2>Et si vous vous<br /><em>libériez du reste ?</em></h2><p>Offrez-vous plus de temps pour vous et pour ceux qui comptent.</p><a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer">J&apos;ai besoin d&apos;un coup de main <span aria-hidden="true">↗</span></a></section>
 
@@ -109,6 +153,7 @@ export default function Home() {
 
       <footer className="site-footer"><div className="wordmark"><Image src="/images/La P'tite Coursiere Fond Transparent.webp" alt="Logo La P'Tite Coursière" width={43} height={43} className="footer-logo" /><span><strong>La P&apos;Tite Coursière</strong><small>Une initiative de CHREOL EMPIRE</small></span></div><p>WhatsApp · 671 290 827<br />Yaoundé, Cameroun</p><p>© {new Date().getFullYear()} La P&apos;Tite Coursière</p></footer>
       <a className="floating-whatsapp" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer" aria-label="Contacter La P'Tite Coursière sur WhatsApp"><span>◔</span><b>Besoin d&apos;aide ?</b></a>
+      {lightboxIndex !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Aperçu de l'image" onMouseDown={(event) => { if (event.target === event.currentTarget) closeLightbox(); }}><button className="lightbox-close" type="button" onClick={closeLightbox} aria-label="Fermer l'aperçu">X</button><button className="lightbox-arrow lightbox-prev" type="button" onClick={() => moveLightbox(-1)} aria-label="Image précédente">‹</button><div className="lightbox-content"><Image src={`/images/${lightboxImages[lightboxIndex][0]}`} alt={lightboxImages[lightboxIndex][1]} width={1400} height={1000} className="lightbox-image" style={{ transform: `scale(${zoom})` }} priority /><p>{lightboxImages[lightboxIndex][1]}</p></div><button className="lightbox-arrow lightbox-next" type="button" onClick={() => moveLightbox(1)} aria-label="Image suivante">›</button><div className="lightbox-controls"><button type="button" onClick={() => setZoom((current) => Math.max(.75, current - .25))} aria-label="Réduire le zoom">−</button><span>{Math.round(zoom * 100)}%</span><button type="button" onClick={() => setZoom((current) => Math.min(2.5, current + .25))} aria-label="Augmenter le zoom">+</button></div></div>}
     </main>
   );
 }
