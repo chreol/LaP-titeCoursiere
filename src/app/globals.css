@@ -131,6 +131,11 @@
 .admin-tools strong, .admin-tools span { display: block; }
 .admin-tools span { margin-top: 3px; color: var(--muted); font-size: .78rem; }
 .admin-tool-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.admin-github-save { display: flex; align-items: end; gap: 10px; }
+.admin-github-save label { display: grid; gap: 6px; color: var(--plum); font-size: .7rem; font-weight: 700; }
+.admin-github-save input { width: 210px; border: 1px solid rgba(75,24,84,.18); padding: 10px 12px; background: #fff; color: var(--ink); font: .78rem 'DM Sans', sans-serif; }
+.admin-github-save input:focus { outline: 2px solid var(--gold); outline-offset: 2px; }
+.admin-button:disabled, .admin-submit:disabled { cursor: wait; opacity: .6; }
 .admin-button, .admin-submit { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 15px; border: 1px solid rgba(75,24,84,.25); background: #fff9f0; color: var(--plum); font-size: .75rem; font-weight: 700; cursor: pointer; }
 .admin-button:hover, .admin-button:focus-visible, .admin-submit:hover, .admin-submit:focus-visible { border-color: var(--plum); background: var(--plum); color: #fff9f0; }
 .admin-file-button input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
@@ -157,7 +162,7 @@
 .admin-media-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .admin-media-row img { width: 44px; height: 44px; object-fit: cover; }
 .admin-footnote { max-width: 700px; margin: 28px 0 0; color: var(--muted); font-size: .72rem; line-height: 1.7; }
-@media (max-width: 700px) { .admin-shell { width: min(100% - 32px, 560px); padding-top: 34px; } .admin-header, .admin-tools { align-items: stretch; flex-direction: column; } .admin-grid { grid-template-columns: 1fr; } .admin-card:last-child { grid-column: auto; } }
+@media (max-width: 700px) { .admin-shell { width: min(100% - 32px, 560px); padding-top: 34px; } .admin-header, .admin-tools { align-items: stretch; flex-direction: column; } .admin-grid { grid-template-columns: 1fr; } .admin-card:last-child { grid-column: auto; } .admin-github-save { align-items: stretch; flex-direction: column; } .admin-github-save input { width: 100%; } }
 
 /* Keep content clear of section edges and preserve the complete hero logo. */
 .price-section { padding-inline: clamp(20px, 4vw, 64px); }

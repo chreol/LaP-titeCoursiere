@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import siteContent from '@/data/site-content.json';
 
 const whatsappNumber = '237671290827';
 const whatsapp = (message: string) => `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
@@ -14,7 +15,7 @@ type AdminContent = {
   videos: { id: string; title: string; url: string }[];
 };
 
-const emptyAdminContent: AdminContent = { testimonials: [], images: [], videos: [] };
+const emptyAdminContent: AdminContent = siteContent;
 
 function parseAdminContent(value: string): AdminContent {
   try {

@@ -32,6 +32,8 @@ function loadContent(): ContentStore {
 export default function AdminPage() {
   const [content, setContent] = useState<ContentStore>(() => loadContent());
   const [notice, setNotice] = useState('');
+  const [githubToken, setGithubToken] = useState('');
+  const [syncing, setSyncing] = useState(false);
   const [testimonial, setTestimonial] = useState({ quote: '', author: '', location: 'Yaoundé' });
   const [image, setImage] = useState({ src: '', alt: '' });
   const [video, setVideo] = useState({ title: '', url: '' });
@@ -108,6 +110,38 @@ export default function AdminPage() {
     event.target.value = '';
   };
 
+  const loadFromGithub = async () => {
+    setSyncing(true);
+    try {
+      const response = await fetch('/api/content');
+      const next = await response.json();
+      if (!response.ok) throw new Error(next.error || 'Lecture GitHub impossible');
+      saveContent(next, 'Contenu chargé depuis GitHub.');
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : 'Lecture GitHub impossible.');
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const saveToGithub = async () => {
+    if (!githubToken.trim()) {
+      setNotice('Saisissez le jeton administrateur configuré sur Vercel.');
+      return;
+    }
+    setSyncing(true);
+    try {
+      const response = await fetch('/api/content', { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${githubToken.trim()}` }, body: JSON.stringify(content) });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Enregistrement GitHub impossible');
+      setNotice('Contenu enregistré sur GitHub. Vercel va lancer le déploiement.');
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : 'Enregistrement GitHub impossible.');
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   return (
     <main className="admin-page">
       <div className="admin-shell">
@@ -123,8 +157,9 @@ export default function AdminPage() {
         <div className="admin-notice" role="status" aria-live="polite">{notice}</div>
 
         <section className="admin-tools" aria-label="Sauvegarde du contenu">
-          <div><strong>Contenu local</strong><span>Les ajouts sont visibles sur ce navigateur.</span></div>
-          <div className="admin-tool-actions"><button className="admin-button" type="button" onClick={exportContent}>Exporter JSON</button><label className="admin-button admin-file-button">Importer JSON<input type="file" accept="application/json" onChange={importContent} /></label></div>
+          <div><strong>Contenu local et GitHub</strong><span>Enregistrer sur GitHub déclenche le déploiement Vercel.</span></div>
+          <div className="admin-tool-actions"><button className="admin-button" type="button" onClick={loadFromGithub} disabled={syncing}>Charger GitHub</button><button className="admin-button" type="button" onClick={exportContent}>Exporter JSON</button><label className="admin-button admin-file-button">Importer JSON<input type="file" accept="application/json" onChange={importContent} /></label></div>
+          <div className="admin-github-save"><label>Jeton admin Vercel<input type="password" value={githubToken} onChange={(event) => setGithubToken(event.target.value)} placeholder="Saisi uniquement ici" autoComplete="off" /></label><button className="admin-submit" type="button" onClick={saveToGithub} disabled={syncing}>{syncing ? 'Synchronisation...' : 'Enregistrer sur GitHub'}</button></div>
         </section>
 
         <div className="admin-grid">
