@@ -211,6 +211,7 @@ export default function Home() {
 
       <section className="trust-section trust-photo-section">
         <div className="section-top"><div><p className="kicker">NOTRE PROMESSE</p><h2>Une présence<br /><em>qui rassure.</em></h2></div><p className="section-lead">Parce que laisser entrer quelqu&apos;un dans son quotidien demande plus qu&apos;une compétence : cela demande de la confiance.</p></div>
+        <div className="trust-team"><Image src="/images/Chreol EMpire l’équipe.png" alt="L'équipe de Chreol Empire, à l'origine de La P'Tite Coursière" width={960} height={960} /><div><p className="kicker">DERRIÈRE LE SERVICE</p><h3>Une équipe qui s&apos;implique.</h3><p>La P&apos;Tite Coursière est portée par une équipe qui croit aux services de proximité, au respect et au travail bien fait. Nous veillons à ce que chaque demande soit accueillie avec attention, du premier message jusqu&apos;à la fin de l&apos;intervention.</p><strong>Une initiative de Chreol Empire.</strong></div></div>
         <div className="trust-grid">{trustPoints.map(([title, text], index) => <div className="trust-item" key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{text}</p></div>)}</div>
       </section>
 
