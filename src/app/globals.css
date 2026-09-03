@@ -121,6 +121,44 @@
 	.testimonials-grid { grid-template-columns: 1fr; }
 }
 
+.admin-page { min-height: 100vh; background: var(--cream); color: var(--ink); }
+.admin-shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0 80px; }
+.admin-header { display: flex; align-items: end; justify-content: space-between; gap: 32px; padding-bottom: 42px; border-bottom: 1px solid rgba(75,24,84,.15); }
+.admin-header h1 { margin: 16px 0 18px; font-size: clamp(2.8rem, 6vw, 5.8rem); }
+.admin-intro { max-width: 480px; margin: 0; color: var(--muted); }
+.admin-notice { min-height: 28px; padding: 18px 0 0; color: #267642; font-size: .85rem; font-weight: 700; }
+.admin-tools { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: 26px 0; padding: 18px 20px; border: 1px solid rgba(75,24,84,.14); background: var(--sand); }
+.admin-tools strong, .admin-tools span { display: block; }
+.admin-tools span { margin-top: 3px; color: var(--muted); font-size: .78rem; }
+.admin-tool-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.admin-button, .admin-submit { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 15px; border: 1px solid rgba(75,24,84,.25); background: #fff9f0; color: var(--plum); font-size: .75rem; font-weight: 700; cursor: pointer; }
+.admin-button:hover, .admin-button:focus-visible, .admin-submit:hover, .admin-submit:focus-visible { border-color: var(--plum); background: var(--plum); color: #fff9f0; }
+.admin-file-button input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.admin-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.admin-card { padding: 26px; border: 1px solid rgba(75,24,84,.14); background: #fff9f0; }
+.admin-card:last-child { grid-column: 1 / -1; }
+.admin-card-heading { display: flex; gap: 16px; align-items: start; margin-bottom: 24px; }
+.admin-card-heading h2 { margin: 10px 0 0; color: var(--plum); font-size: clamp(1.7rem, 3vw, 2.5rem); }
+.admin-index { color: #8f7c8c; font: 600 .7rem 'DM Mono', monospace; }
+.admin-form { display: grid; gap: 14px; }
+.admin-form label { display: grid; gap: 7px; color: var(--plum); font-size: .76rem; font-weight: 700; }
+.admin-form input, .admin-form textarea { width: 100%; border: 1px solid rgba(75,24,84,.18); border-radius: 0; padding: 11px 12px; background: #fff; color: var(--ink); font: 400 .86rem 'DM Sans', sans-serif; }
+.admin-form textarea { min-height: 110px; resize: vertical; }
+.admin-form input:focus, .admin-form textarea:focus { outline: 2px solid var(--gold); outline-offset: 2px; }
+.admin-submit { margin-top: 4px; border-color: var(--gold); background: var(--gold); }
+.admin-list { display: grid; gap: 8px; margin-top: 24px; }
+.admin-list-item { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px; border-top: 1px solid rgba(75,24,84,.12); }
+.admin-list-item strong, .admin-list-item span { display: block; }
+.admin-list-item strong { color: var(--plum); font-size: .82rem; }
+.admin-list-item span { margin-top: 4px; color: var(--muted); font-size: .7rem; overflow-wrap: anywhere; }
+.admin-list-item button { flex: 0 0 auto; border: 0; background: transparent; color: #a33d38; font-size: .7rem; cursor: pointer; }
+.admin-list-item button:hover, .admin-list-item button:focus-visible { text-decoration: underline; }
+.admin-image-preview { width: 100%; max-height: 210px; object-fit: cover; border: 1px solid rgba(75,24,84,.14); }
+.admin-media-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.admin-media-row img { width: 44px; height: 44px; object-fit: cover; }
+.admin-footnote { max-width: 700px; margin: 28px 0 0; color: var(--muted); font-size: .72rem; line-height: 1.7; }
+@media (max-width: 700px) { .admin-shell { width: min(100% - 32px, 560px); padding-top: 34px; } .admin-header, .admin-tools { align-items: stretch; flex-direction: column; } .admin-grid { grid-template-columns: 1fr; } .admin-card:last-child { grid-column: auto; } }
+
 /* Keep content clear of section edges and preserve the complete hero logo. */
 .price-section { padding-inline: clamp(20px, 4vw, 64px); }
 .price-list { min-width: 0; }

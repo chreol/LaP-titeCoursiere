@@ -1,14 +1,48 @@
 "use client";
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 
 const whatsappNumber = '237671290827';
 const whatsapp = (message: string) => `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 const whatsappIcon = '/images/whatsapp.webp';
+const adminStorageKey = 'lpc-admin-content-v1';
+
+type AdminContent = {
+  testimonials: { id: string; quote: string; author: string; location: string }[];
+  images: { id: string; src: string; alt: string }[];
+  videos: { id: string; title: string; url: string }[];
+};
+
+const emptyAdminContent: AdminContent = { testimonials: [], images: [], videos: [] };
+
+function parseAdminContent(value: string): AdminContent {
+  try {
+    const saved = JSON.parse(value || 'null');
+    return { testimonials: Array.isArray(saved?.testimonials) ? saved.testimonials : [], images: Array.isArray(saved?.images) ? saved.images : [], videos: Array.isArray(saved?.videos) ? saved.videos : [] };
+  } catch {
+    return emptyAdminContent;
+  }
+}
+
+function subscribeToAdminContent(onChange: () => void) {
+  window.addEventListener('storage', onChange);
+  return () => window.removeEventListener('storage', onChange);
+}
 
 function WhatsAppIcon() {
   return <Image src={whatsappIcon} alt="" width={20} height={20} className="whatsapp-icon" aria-hidden="true" />;
+}
+
+function videoEmbedUrl(value: string) {
+  try {
+    const url = new URL(value);
+    if (url.hostname.includes('youtu.be')) return `https://www.youtube-nocookie.com/embed/${url.pathname.slice(1)}`;
+    if (url.hostname.includes('youtube.com')) return `https://www.youtube-nocookie.com/embed/${url.searchParams.get('v') || url.pathname.split('/').pop()}`;
+    return value;
+  } catch {
+    return value;
+  }
 }
 
 const services = [
@@ -57,7 +91,7 @@ const galleryImages = [
   ["La P'tite Coursiere (2).webp", 'Notre équipe, à votre service'],
 ];
 
-const lightboxImages = [
+const baseLightboxImages = [
   ["LOGO La P'tite Coursiere Fond Transparent.webp", "Logo de La P'Tite Coursière"],
   ['La P’tite Coursière Services Wheel.webp', "Les services de La P'Tite Coursière"],
   ['La P’tite Coursière  Matinée en douceur.webp', "Une matinée accompagnée par La P'Tite Coursière"],
@@ -68,7 +102,13 @@ const lightboxImages = [
 export default function Home() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [zoom, setZoom] = useState(1);
+  const adminSnapshot = useSyncExternalStore(subscribeToAdminContent, () => localStorage.getItem(adminStorageKey) || '', () => '');
+  const adminContent = parseAdminContent(adminSnapshot);
   const touchStartX = useRef<number | null>(null);
+  const customGalleryImages = adminContent.images.map(({ src, alt }) => [src, alt] as [string, string]);
+  const allGalleryImages = [...galleryImages.map(([src, alt]) => [`/images/${src}`, alt] as [string, string]), ...customGalleryImages];
+  const lightboxImages = [...baseLightboxImages.slice(0, 4).map(([src, alt]) => [`/images/${src}`, alt] as [string, string]), ...allGalleryImages];
+  const allTestimonials = [...testimonials, ...adminContent.testimonials.map(({ quote, author, location }) => [`« ${quote} »`, `${author} · ${location}`] as [string, string])];
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
@@ -106,7 +146,7 @@ export default function Home() {
       document.body.classList.remove('lightbox-open');
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [lightboxIndex]);
+  }, [lightboxIndex, lightboxImages.length]);
 
   return (
     <main>
@@ -154,17 +194,17 @@ export default function Home() {
 
       <section className="zones-section" id="zones"><div className="zones-copy"><p className="kicker">LÀ OÙ NOUS SOMMES</p><h2>Yaoundé,<br /><em>avec vous.</em></h2><p>Vous êtes dans un quartier voisin ? Contactez-nous, nous vérifierons ensemble la disponibilité.</p><p className="zone-list-text"><strong>Quartiers desservis :</strong> {zones.join(' · ')}</p><a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je suis dans un quartier voisin de Yaoundé et je souhaite connaître vos disponibilités.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> Vérifier ma zone <span aria-hidden="true">↗</span></a></div><div className="zone-map"><iframe title="Localisation de La P'Tite Coursière à Yaoundé" src="https://www.google.com/maps?q=Yaound%C3%A9%2C%20Cameroun&output=embed" loading="lazy" /><div className="map-overlay-label">Yaoundé · Cameroun</div></div></section>
 
-      <section className="video-section" id="videos"><div className="section-top"><div><p className="kicker">EN IMAGES</p><h2>Notre univers,<br /><em>en mouvement.</em></h2></div><p className="section-lead">Découvrez notre façon de prendre soin des maisons et des journées.</p></div><div className="video-grid"><iframe src="https://www.youtube-nocookie.com/embed/toDWlSwyXFM" title="Découvrez La P'Tite Coursière" loading="lazy" allowFullScreen /><iframe src="https://www.youtube-nocookie.com/embed/8cCSuJry_cg" title="Les services de La P'Tite Coursière" loading="lazy" allowFullScreen /></div></section>
+      <section className="video-section" id="videos"><div className="section-top"><div><p className="kicker">EN IMAGES</p><h2>Notre univers,<br /><em>en mouvement.</em></h2></div><p className="section-lead">Découvrez notre façon de prendre soin des maisons et des journées.</p></div><div className="video-grid"><iframe src="https://www.youtube-nocookie.com/embed/toDWlSwyXFM" title="Découvrez La P'Tite Coursière" loading="lazy" allowFullScreen /><iframe src="https://www.youtube-nocookie.com/embed/8cCSuJry_cg" title="Les services de La P'Tite Coursière" loading="lazy" allowFullScreen />{adminContent.videos.map((video) => <iframe key={video.id} src={videoEmbedUrl(video.url)} title={video.title} loading="lazy" allowFullScreen />)}</div></section>
 
-      <section className="gallery-section" aria-labelledby="gallery-title"><div className="section-top"><div><p className="kicker">NOS RÉALISATIONS</p><h2 id="gallery-title">Des images<br /><em>qui parlent.</em></h2></div><p className="section-lead">Retrouvez trois visuels ici. Ouvrez une image puis balayez pour parcourir toute la galerie.</p></div><div className="gallery-grid">{galleryImages.slice(0, 3).map(([src, alt], index) => <figure key={src}><button className="image-trigger" type="button" onClick={() => openLightbox(index + 4)} aria-label={`Agrandir : ${alt}`}><Image src={`/images/${src}`} alt={alt} width={700} height={700} loading="lazy" /><span className="zoom-hint" aria-hidden="true">+</span></button><figcaption>{alt}</figcaption></figure>)}</div></section>
+      <section className="gallery-section" aria-labelledby="gallery-title"><div className="section-top"><div><p className="kicker">NOS RÉALISATIONS</p><h2 id="gallery-title">Des images<br /><em>qui parlent.</em></h2></div><p className="section-lead">Retrouvez trois visuels ici. Ouvrez une image puis balayez pour parcourir toute la galerie.</p></div><div className="gallery-grid">{allGalleryImages.slice(0, 3).map(([src, alt], index) => <figure key={`${src}-${index}`}><button className="image-trigger" type="button" onClick={() => openLightbox(index + 4)} aria-label={`Agrandir : ${alt}`}><Image src={src} alt={alt} width={700} height={700} loading="lazy" unoptimized={src.startsWith('data:')} /><span className="zoom-hint" aria-hidden="true">+</span></button><figcaption>{alt}</figcaption></figure>)}</div></section>
 
       <section className="final-cta"><p className="kicker">UN MESSAGE SUFFIT</p><h2>Et si vous vous<br /><em>libériez du reste ?</em></h2><p>Offrez-vous plus de temps pour vous et pour ceux qui comptent.</p><a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> J&apos;ai besoin d&apos;un coup de main <span aria-hidden="true">↗</span></a></section>
 
-      <section className="testimonials-section" aria-labelledby="testimonials-title"><div className="section-top"><div><p className="kicker">L&apos;EXPÉRIENCE AU QUOTIDIEN</p><h2 id="testimonials-title">Le confort<br /><em>se partage.</em></h2></div><p className="section-lead">Des mots simples sur ce que nos clientes recherchent : du temps, du soin et une présence fiable.</p></div><div className="testimonials-grid">{testimonials.map(([quote, source]) => <figure className="testimonial" key={quote}><blockquote>{quote}</blockquote><figcaption>{source}</figcaption></figure>)}</div><p className="testimonial-note">Avis présentés comme exemples éditoriaux, à remplacer par vos témoignages clients vérifiés.</p></section>
+      <section className="testimonials-section" aria-labelledby="testimonials-title"><div className="section-top"><div><p className="kicker">L&apos;EXPÉRIENCE AU QUOTIDIEN</p><h2 id="testimonials-title">Le confort<br /><em>se partage.</em></h2></div><p className="section-lead">Des mots simples sur ce que nos clientes recherchent : du temps, du soin et une présence fiable.</p></div><div className="testimonials-grid">{allTestimonials.map(([quote, source]) => <figure className="testimonial" key={`${quote}-${source}`}><blockquote>{quote}</blockquote><figcaption>{source}</figcaption></figure>)}</div><p className="testimonial-note">Avis présentés comme exemples éditoriaux, à remplacer par vos témoignages clients vérifiés.</p></section>
 
       <footer className="site-footer"><div className="wordmark"><Image src="/images/La P'tite Coursiere Fond Transparent.webp" alt="Logo La P'Tite Coursière" width={43} height={43} className="footer-logo" /><span><strong>La P&apos;Tite Coursière</strong><small>Une initiative de CHREOL EMPIRE</small></span></div><p><a className="footer-contact" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> WhatsApp · 671 290 827</a><br />Yaoundé, Cameroun</p><p>© {new Date().getFullYear()} La P&apos;Tite Coursière</p></footer>
       <a className="floating-whatsapp" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer" aria-label="Contacter La P'Tite Coursière sur WhatsApp"><WhatsAppIcon /><b>Besoin d&apos;aide ?</b></a>
-      {lightboxIndex !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Aperçu de l'image" onMouseDown={(event) => { if (event.target === event.currentTarget) closeLightbox(); }} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}><button className="lightbox-close" type="button" onClick={closeLightbox} aria-label="Fermer l'aperçu">X</button><button className="lightbox-arrow lightbox-prev" type="button" onClick={() => moveLightbox(-1)} aria-label="Image précédente">‹</button><div className="lightbox-content"><Image src={`/images/${lightboxImages[lightboxIndex][0]}`} alt={lightboxImages[lightboxIndex][1]} width={1400} height={1000} className="lightbox-image" style={{ transform: `scale(${zoom})` }} priority /><p>{lightboxImages[lightboxIndex][1]}</p></div><button className="lightbox-arrow lightbox-next" type="button" onClick={() => moveLightbox(1)} aria-label="Image suivante">›</button><div className="lightbox-controls"><button type="button" onClick={() => setZoom((current) => Math.max(.75, current - .25))} aria-label="Réduire le zoom">−</button><span>{Math.round(zoom * 100)}%</span><button type="button" onClick={() => setZoom((current) => Math.min(2.5, current + .25))} aria-label="Augmenter le zoom">+</button></div></div>}
+      {lightboxIndex !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Aperçu de l'image" onMouseDown={(event) => { if (event.target === event.currentTarget) closeLightbox(); }} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}><button className="lightbox-close" type="button" onClick={closeLightbox} aria-label="Fermer l'aperçu">X</button><button className="lightbox-arrow lightbox-prev" type="button" onClick={() => moveLightbox(-1)} aria-label="Image précédente">‹</button><div className="lightbox-content"><Image src={lightboxImages[lightboxIndex][0]} alt={lightboxImages[lightboxIndex][1]} width={1400} height={1000} className="lightbox-image" style={{ transform: `scale(${zoom})` }} priority unoptimized={lightboxImages[lightboxIndex][0].startsWith('data:')} /><p>{lightboxImages[lightboxIndex][1]}</p></div><button className="lightbox-arrow lightbox-next" type="button" onClick={() => moveLightbox(1)} aria-label="Image suivante">›</button><div className="lightbox-controls"><button type="button" onClick={() => setZoom((current) => Math.max(.75, current - .25))} aria-label="Réduire le zoom">−</button><span>{Math.round(zoom * 100)}%</span><button type="button" onClick={() => setZoom((current) => Math.min(2.5, current + .25))} aria-label="Augmenter le zoom">+</button></div></div>}
     </main>
   );
 }
