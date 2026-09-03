@@ -185,7 +185,12 @@
 .hero-art { min-height: clamp(420px, 48vw, 560px); border-radius: var(--radius); }
 .hero-image.hero-logo { object-fit: contain; padding: clamp(20px, 6vw, 72px); }
 .hero-image-trigger { border-radius: inherit; }
+.hero-copy { min-width: 0; }
+.hero-story { display: grid; gap: 12px; max-width: 550px; margin-top: 24px; color: var(--muted); font-size: .93rem; line-height: 1.7; }
+.hero-story p { margin: 0; padding-left: 18px; border-left: 2px solid var(--gold); }
+.hero-story strong { color: var(--plum); }
 @media (max-width: 800px) {
 	.price-section { padding-inline: 20px; }
 	.hero-art { min-height: 390px; }
+	.hero-story { font-size: .88rem; }
 }

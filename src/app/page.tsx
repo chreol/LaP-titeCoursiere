@@ -157,16 +157,20 @@ export default function Home() {
           <span><strong>La P&apos;Tite Coursière</strong><small>Votre confort, notre priorité</small></span>
         </a>
         <nav aria-label="Navigation principale">
-          <a href="#services">Services</a><a href="#tarifs">Tarifs</a><a href="#zones">Zones</a><a href="#videos">Vidéos</a>
+          <a href="#services">Services</a><a href="#tarifs">Tarifs</a><a href="#zones">Zones</a><a href="#videos">Vidéos</a><a href="#temoignages">Témoignages</a>
         </nav>
         <a className="button button-small button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> WhatsApp <span aria-hidden="true">↗</span></a>
       </header>
 
       <section className="hero" id="accueil">
         <div className="hero-copy">
-          <p className="kicker">YAOUNDÉ · SERVICE DE PROXIMITÉ</p>
-          <h1>Le quotidien<br /><em>en mieux.</em></h1>
-          <p className="hero-intro">Ménage, linge, courses et aide à domicile : nous prenons soin de ce qui vous prend du temps.</p>
+          <p className="kicker">YAOUNDÉ · UNE AIDE QUI ARRIVE AU BON MOMENT</p>
+          <h1>Quand les tâches s&apos;accumulent,<br /><em>on vous aide à souffler.</em></h1>
+          <div className="hero-story" aria-label="L&apos;histoire de La P&apos;Tite Coursière">
+            <p><strong>Tout commence par une réalité :</strong> entre le travail, les enfants, le linge, les courses et les repas, les journées deviennent vite trop pleines.</p>
+            <p><strong>Alors une idée est née à Yaoundé :</strong> créer une présence de proximité, fiable et humaine, capable de prendre le relais quand vous en avez besoin.</p>
+            <p><strong>La P&apos;Tite Coursière est cette petite aide</strong> qui transforme une tâche en temps retrouvé, avec confiance, discrétion et soin.</p>
+          </div>
           <div className="hero-actions">
             <a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> Parler sur WhatsApp <span aria-hidden="true">↗</span></a>
             <a className="text-link" href="#services">Découvrir les services <span aria-hidden="true">↓</span></a>
@@ -201,7 +205,7 @@ export default function Home() {
 
       <section className="final-cta"><p className="kicker">UN MESSAGE SUFFIT</p><h2>Et si vous vous<br /><em>libériez du reste ?</em></h2><p>Offrez-vous plus de temps pour vous et pour ceux qui comptent.</p><a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> J&apos;ai besoin d&apos;un coup de main <span aria-hidden="true">↗</span></a></section>
 
-      <section className="testimonials-section" aria-labelledby="testimonials-title"><div className="section-top"><div><p className="kicker">L&apos;EXPÉRIENCE AU QUOTIDIEN</p><h2 id="testimonials-title">Le confort<br /><em>se partage.</em></h2></div><p className="section-lead">Des mots simples sur ce que nos clientes recherchent : du temps, du soin et une présence fiable.</p></div><div className="testimonials-marquee"><div className="testimonials-track"><div className="testimonials-grid">{allTestimonials.map(([quote, source, rating]) => <figure className="testimonial" key={`${quote}-${source}`}><blockquote>{quote}</blockquote>{rating > 0 && <div className="testimonial-stars" aria-label={`${rating} étoiles sur 5`}>{'★'.repeat(rating)}{'☆'.repeat(5 - rating)}</div>}<figcaption>{source}</figcaption></figure>)}</div><div className="testimonials-grid" aria-hidden="true">{allTestimonials.map(([quote, source, rating]) => <figure className="testimonial" key={`duplicate-${quote}-${source}`}><blockquote>{quote}</blockquote>{rating > 0 && <div className="testimonial-stars">{'★'.repeat(rating)}{'☆'.repeat(5 - rating)}</div>}<figcaption>{source}</figcaption></figure>)}</div></div></div><p className="testimonial-note">Avis présentés comme exemples éditoriaux, à remplacer par vos témoignages clients vérifiés.</p></section>
+      <section className="testimonials-section" id="temoignages" aria-labelledby="testimonials-title"><div className="section-top"><div><p className="kicker">L&apos;EXPÉRIENCE AU QUOTIDIEN</p><h2 id="testimonials-title">Le confort<br /><em>se partage.</em></h2></div><p className="section-lead">Des mots simples sur ce que nos clientes recherchent : du temps, du soin et une présence fiable.</p></div><div className="testimonials-marquee"><div className="testimonials-track"><div className="testimonials-grid">{allTestimonials.map(([quote, source, rating]) => <figure className="testimonial" key={`${quote}-${source}`}><blockquote>{quote}</blockquote>{rating > 0 && <div className="testimonial-stars" aria-label={`${rating} étoiles sur 5`}>{'★'.repeat(rating)}{'☆'.repeat(5 - rating)}</div>}<figcaption>{source}</figcaption></figure>)}</div><div className="testimonials-grid" aria-hidden="true">{allTestimonials.map(([quote, source, rating]) => <figure className="testimonial" key={`duplicate-${quote}-${source}`}><blockquote>{quote}</blockquote>{rating > 0 && <div className="testimonial-stars">{'★'.repeat(rating)}{'☆'.repeat(5 - rating)}</div>}<figcaption>{source}</figcaption></figure>)}</div></div></div><p className="testimonial-note">Avis présentés comme exemples éditoriaux, à remplacer par vos témoignages clients vérifiés.</p></section>
 
       <footer className="site-footer"><div className="wordmark"><Image src="/images/LOGO La P'tite Coursiere Fond Transparent.webp" alt="Logo La P'Tite Coursière" width={43} height={43} className="footer-logo" /><span><strong>La P&apos;Tite Coursière</strong><small>Une initiative de CHREOL EMPIRE</small></span></div><p><a className="footer-contact" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> WhatsApp · 671 290 827</a><br />Yaoundé, Cameroun</p><p>© {new Date().getFullYear()} La P&apos;Tite Coursière</p></footer>
       <a className="floating-whatsapp" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, j'ai besoin d'aide et je souhaite avoir plus d'informations sur vos services.")} target="_blank" rel="noreferrer" aria-label="Contacter La P'Tite Coursière sur WhatsApp"><WhatsAppIcon /><b>Besoin d&apos;aide ?</b></a>
