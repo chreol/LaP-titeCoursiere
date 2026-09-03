@@ -103,6 +103,7 @@ const baseLightboxImages = [
 export default function Home() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [zoom, setZoom] = useState(1);
+  const [menuOpen, setMenuOpen] = useState(false);
   const adminSnapshot = useSyncExternalStore(subscribeToAdminContent, () => localStorage.getItem(adminStorageKey) || '', () => '');
   const adminContent = parseAdminContent(adminSnapshot);
   const touchStartX = useRef<number | null>(null);
@@ -156,8 +157,9 @@ export default function Home() {
           <Image src="/images/LOGO La P'tite Coursiere Fond Transparent.webp" alt="Logo La P'Tite Coursière" width={43} height={43} className="header-logo" priority />
           <span><strong>La P&apos;Tite Coursière</strong><small>Votre confort, notre priorité</small></span>
         </a>
-        <nav aria-label="Navigation principale">
-          <a href="#services">Services</a><a href="#tarifs">Tarifs</a><a href="#zones">Zones</a><a href="#videos">Vidéos</a><a href="#temoignages">Témoignages</a>
+        <button className="mobile-menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen((open) => !open)}><span aria-hidden="true">{menuOpen ? '×' : '☰'}</span><span className="sr-only">{menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}</span></button>
+        <nav id="main-navigation" className={menuOpen ? 'is-open' : ''} aria-label="Navigation principale">
+          <a href="#services" onClick={() => setMenuOpen(false)}>Services</a><a href="#tarifs" onClick={() => setMenuOpen(false)}>Tarifs</a><a href="#zones" onClick={() => setMenuOpen(false)}>Zones</a><a href="#videos" onClick={() => setMenuOpen(false)}>Vidéos</a><a href="#temoignages" onClick={() => setMenuOpen(false)}>Témoignages</a>
         </nav>
         <a className="button button-small button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, je souhaite obtenir des informations sur vos services.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> WhatsApp <span aria-hidden="true">↗</span></a>
       </header>
@@ -180,6 +182,21 @@ export default function Home() {
         <div className="hero-art" aria-label="Espace réservé au visuel principal de La P'Tite Coursière">
           <button className="image-trigger hero-image-trigger" type="button" onClick={() => openLightbox(0)} aria-label="Agrandir le logo de La P'Tite Coursière"><Image className="hero-image hero-logo" src="/images/LOGO La P'tite Coursiere Fond Transparent.webp" alt="Logo La P'Tite Coursière" fill priority sizes="(max-width: 800px) 100vw, 50vw" /></button>
         </div>
+      </section>
+
+      <section className="emotional-section" aria-labelledby="emotional-title">
+        <div className="emotional-inner">
+          <div>
+            <p className="kicker">VOUS N&apos;AVEZ PAS À TOUT PORTER</p>
+            <h2 id="emotional-title">Un peu d&apos;aide peut<br /><em>changer toute une journée.</em></h2>
+          </div>
+          <div className="emotional-copy">
+            <p>Quand le linge attend, que la vaisselle s&apos;accumule et que les courses repoussent le moment de souffler, ce n&apos;est pas un manque d&apos;organisation. C&apos;est simplement une journée déjà bien remplie.</p>
+            <p><strong>La P&apos;Tite Coursière prend le relais avec respect</strong>, pour vous rendre du temps, du calme et l&apos;esprit plus léger.</p>
+            <a className="button button-gold" href={whatsapp("Bonjour La P'Tite Coursière 👋🏾, ma journée est bien remplie et j'ai besoin d'un coup de main.")} target="_blank" rel="noreferrer"><WhatsAppIcon /> Retrouver du temps pour moi <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <div className="emotional-steps" aria-label="Notre façon de vous aider"><div><span>01</span><strong>Vous nous écrivez</strong><p>Expliquez simplement ce dont vous avez besoin.</p></div><div><span>02</span><strong>Nous trouvons une solution</strong><p>Un échange clair, un service adapté à votre journée.</p></div><div><span>03</span><strong>Vous soufflez enfin</strong><p>Nous prenons le relais avec soin et discrétion.</p></div></div>
       </section>
 
       <section className="service-section" id="services">
